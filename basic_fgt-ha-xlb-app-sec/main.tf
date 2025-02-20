@@ -1,18 +1,15 @@
-data "google_compute_zones" "available_zones" {
-  region = var.custom_vars["region"]
+# ----------------------------------------------------------------------------------------
+# Variables
+# ----------------------------------------------------------------------------------------
+variable "prefix" {
+  description = "Prefix to configured items in Azure"
+  type        = string
+  default     = "fgt-ha-xlb"
 }
-
-locals {
-  zone1 = length(data.google_compute_zones.available_zones.names) > 0 ? data.google_compute_zones.available_zones.names[0] : null
-  zone2 = length(data.google_compute_zones.available_zones.names) > 1 ? data.google_compute_zones.available_zones.names[1] : null
-}
-
-data "google_client_openid_userinfo" "me" {}
 
 variable "custom_vars" {
   description = "Custom variables"
   type = object({
-    prefix           = optional(string, "fgt-ha-xlb")
     region           = optional(string, "europe-southwest1")
     fgt_version      = optional(string, "7.4.6")
     license_type     = optional(string, "payg")
@@ -35,13 +32,13 @@ module "fgt-ha-xlb" {
 
   project = var.project
 
-  prefix = var.custom_vars["prefix"]
+  prefix = var.prefix
   region = var.custom_vars["region"]
   zone1  = local.zone1
   zone2  = local.zone2
 
   onramp = {
-    id      = var.custom_vars["prefix"]
+    id      = var.prefix
     cidr    = var.custom_vars["fgt_vpc_cidr"]
     bgp_asn = "65000"
   }
@@ -59,7 +56,7 @@ module "vpc_spoke" {
   source  = "jmvigueras/ftnt-gcp-modules/gcp//modules/vpc_spoke"
   version = "0.0.8"
 
-  prefix = var.custom_vars["prefix"]
+  prefix = var.prefix
   region = var.custom_vars["region"]
 
   spoke-subnet_cidrs = ["172.30.100.0/23"]
@@ -72,7 +69,7 @@ module "vm_spoke" {
   source  = "jmvigueras/ftnt-gcp-modules/gcp//modules/vm"
   version = "0.0.8"
 
-  prefix = var.custom_vars["prefix"]
+  prefix = var.prefix
   region = var.custom_vars["region"]
   zone   = local.zone1
 
@@ -87,14 +84,14 @@ module "vm_spoke" {
 
 locals {
   # K8S configuration and APP deployment
-  k8s_deployment = templatefile("./templates/k8s-dvwa-swagger.yaml", {
+  k8s_deployment = templatefile("./templates/k8s-dvwa-swagger.yaml.tp", {
     dvwa_nodeport    = "31000"
     swagger_nodeport = "31001"
     swagger_host     = module.fgt-ha-xlb.fgt["fgt_1_public"]
     swagger_url      = "http://${module.fgt-ha-xlb.fgt["fgt_1_public"]}:31001"
     }
   )
-  k8s_user_data = templatefile("./templates/k8s.sh", {
+  k8s_user_data = templatefile("./templates/k8s.sh.tp", {
     k8s_version    = var.custom_vars["k8s_version"]
     linux_user     = split("@", data.google_client_openid_userinfo.me.email)[0]
     k8s_deployment = local.k8s_deployment
@@ -116,20 +113,33 @@ output "vm_spoke" {
   }
 }
 
+# ----------------------------------------------------------------------------------------
+# Data and Locals
+# ----------------------------------------------------------------------------------------
+data "google_compute_zones" "available_zones" {
+  region = var.custom_vars["region"]
+}
+
+locals {
+  zone1 = length(data.google_compute_zones.available_zones.names) > 0 ? data.google_compute_zones.available_zones.names[0] : null
+  zone2 = length(data.google_compute_zones.available_zones.names) > 1 ? data.google_compute_zones.available_zones.names[1] : null
+}
+
+data "google_client_openid_userinfo" "me" {}
+
 #------------------------------------------------------------------------------------------------------------
 # Provider
 #------------------------------------------------------------------------------------------------------------
+variable "project" {}
+variable "access_token" {}
+
 provider "google" {
-  project = var.project
+  project      = var.project
+  access_token = var.access_token
 }
 provider "google-beta" {
-  project = var.project
-}
-
-# GCP resourcers prefix description
-variable "project" {
-  type    = string
-  default = null
+  project      = var.project
+  access_token = var.access_token
 }
 
 # Prevent Terraform warning for backend config
