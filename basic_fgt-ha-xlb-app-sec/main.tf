@@ -2,7 +2,7 @@
 # Variables
 # ----------------------------------------------------------------------------------------
 variable "prefix" {
-  description = "Prefix to configured items in Azure"
+  description = "Prefix to configured items in GCP"
   type        = string
   default     = "fgt-ha-xlb"
 }
@@ -28,9 +28,7 @@ variable "custom_vars" {
 #------------------------------------------------------------------------------------------------------------
 module "fgt-ha-xlb" {
   source  = "jmvigueras/ftnt-gcp-modules/gcp//examples/basic_fgt-ha-xlb"
-  version = "0.0.8"
-
-  project = var.project
+  version = "0.0.9"
 
   prefix = var.prefix
   region = var.custom_vars["region"]
@@ -54,7 +52,7 @@ module "fgt-ha-xlb" {
 #------------------------------------------------------------------------------------------------------------
 module "vpc_spoke" {
   source  = "jmvigueras/ftnt-gcp-modules/gcp//modules/vpc_spoke"
-  version = "0.0.8"
+  version = "0.0.9"
 
   prefix = var.prefix
   region = var.custom_vars["region"]
@@ -67,7 +65,7 @@ module "vpc_spoke" {
 #------------------------------------------------------------------------------------------------------------
 module "vm_spoke" {
   source  = "jmvigueras/ftnt-gcp-modules/gcp//modules/vm"
-  version = "0.0.8"
+  version = "0.0.9"
 
   prefix = var.prefix
   region = var.custom_vars["region"]
@@ -130,18 +128,6 @@ data "google_client_openid_userinfo" "me" {}
 #------------------------------------------------------------------------------------------------------------
 # Provider
 #------------------------------------------------------------------------------------------------------------
-variable "project" {}
-variable "access_token" {}
-
-provider "google" {
-  project      = var.project
-  access_token = var.access_token
-}
-provider "google-beta" {
-  project      = var.project
-  access_token = var.access_token
-}
-
 # Prevent Terraform warning for backend config
 terraform {
   backend "s3" {}
