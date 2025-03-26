@@ -11,7 +11,7 @@ variable "custom_vars" {
   description = "Custom variables"
   type = object({
     region           = optional(string, "europe-southwest1")
-    fgt_version      = optional(string, "7.4.6")
+    fgt_version      = optional(string, "7.4.7")
     license_type     = optional(string, "payg")
     fgt_size         = optional(string, "n2-standard-4")
     fgt_cluster_type = optional(string, "fgcp")
