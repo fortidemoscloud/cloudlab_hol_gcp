@@ -42,7 +42,7 @@ module "fgt-ha-xlb" {
   }
 
   license_type = var.custom_vars["license_type"]
-  cluster_type = var.custom_vars["license_type"]
+  cluster_type = var.custom_vars["fgt_cluster_type"]
   fgt_version  = replace(var.custom_vars["fgt_version"], ".", "")
 
   machine = var.custom_vars["fgt_size"]
@@ -103,11 +103,11 @@ output "fgt" {
   value = module.fgt-ha-xlb.fgt
 }
 
-output "vm_spoke" {
+output "k8s" {
   value = {
     admin_user = split("@", data.google_client_openid_userinfo.me.email)[0]
-    pip        = module.vm_spoke.vm["pip"]
-    ip         = module.vm_spoke.vm["ip"]
+    pip        = join(", ", module.vm_spoke.vm["pip"])
+    ip         = join(", ",module.vm_spoke.vm["ip"])
   }
 }
 
