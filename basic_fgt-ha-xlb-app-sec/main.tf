@@ -18,7 +18,7 @@ variable "custom_vars" {
     fgt_vpc_cidr     = optional(string, "172.10.0.0/23")
     k8s_size         = optional(string, "e2-standard-2")
     k8s_version      = optional(string, "1.31")
-    tags             = optional(map(string), { "Deploy" = "CloudLab AWS", "Project" = "CloudLab" })
+    tags             = optional(map(string), { "Deploy" = "CloudLab GCP", "Project" = "CloudLab" })
   })
   default = {}
 }
