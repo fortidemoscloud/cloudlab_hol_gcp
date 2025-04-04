@@ -16,7 +16,7 @@ variable "fortiflex_token" {
 variable "custom_vars" {
   description = "Custom variables"
   type = object({
-    region           = optional(string, "europe-southwest1")
+    region           = optional(string, "europe-west2")
     fgt_version      = optional(string, "7.4.7")
     license_type     = optional(string, "byol")
     fgt_size         = optional(string, "n2-standard-4")
