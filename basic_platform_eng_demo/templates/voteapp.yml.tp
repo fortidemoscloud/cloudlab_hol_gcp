@@ -28,7 +28,7 @@ spec:
         - name: REDIS_HOST
           value: redis-voteapp.vote-app.svc.cluster.local
         - name: QUESTION
-          value: '¿Te atreves con el DC del futuro?'
+          value: 'Do you like automation with Fortinet?'
 ---
 apiVersion: apps/v1
 kind: Deployment
