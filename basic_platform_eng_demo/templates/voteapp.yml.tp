@@ -1,0 +1,79 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vote-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vote-app
+  namespace: vote-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vote-app
+  template:
+    metadata:
+      labels:
+        app: vote-app
+    spec:
+      containers:
+      - name: vote-app
+        image: jviguerasfortinet/vote-app:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+        env:
+        - name: REDIS_HOST
+          value: redis-voteapp.vote-app.svc.cluster.local
+        - name: QUESTION
+          value: '¿Te atreves con el DC del futuro?'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-voteapp
+  namespace: vote-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis-voteapp
+  template:
+    metadata:
+      labels:
+        app: redis-voteapp
+    spec:
+      containers:
+      - name: redis
+        image: redis
+        ports:
+        - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote-app
+  namespace: vote-app
+spec:
+  selector:
+    app: vote-app
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+    nodePort: ${node_port}
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-voteapp
+  namespace: vote-app
+spec:
+  selector:
+    app: redis-voteapp
+  ports:
+  - protocol: TCP
+    port: 6379
