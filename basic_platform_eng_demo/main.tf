@@ -10,7 +10,7 @@ variable "prefix" {
 variable "fortiflex_token" {
   description = "FortiFlex token"
   type        = string
-  default     = "5247B00074EED042B601"
+  default     = ""
 }
 
 variable "custom_vars" {
@@ -34,8 +34,6 @@ variable "custom_vars" {
 #------------------------------------------------------------------------------------------------------------
 module "fgt-xlb" {
   source  = "./modules/fgt-xlb"
-
-  project = var.project
 
   prefix = var.prefix
   region = var.custom_vars["region"]
@@ -121,7 +119,6 @@ output "k8s" {
 # ----------------------------------------------------------------------------------------
 data "google_compute_zones" "available_zones" {
   region = var.custom_vars["region"]
-  project = var.project
 }
 
 locals {
@@ -134,7 +131,6 @@ data "google_client_openid_userinfo" "me" {}
 #------------------------------------------------------------------------------------------------------------
 # Provider
 #------------------------------------------------------------------------------------------------------------
-variable "project" {}
 # Prevent Terraform warning for backend config
 terraform {
   backend "s3" {}
