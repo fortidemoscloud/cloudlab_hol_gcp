@@ -1,22 +1,6 @@
 #------------------------------------------------------------------------------------------------------------
 # Create FGT HA deployment with LoadBalancers
 #------------------------------------------------------------------------------------------------------------
-data "google_secret_manager_secret_version" "hubs_secret" {
-  secret = var.hubs_secret_id
-}
-
-locals {
-  hubs = var.hubs_secret_id != "" ? jsondecode(data.google_secret_manager_secret_version.hubs_secret.secret_data) : var.hubs != null ? var.hubs : [{}]
-  spoke = {
-    id      = var.spoke["id"]
-    bgp_asn = lookup(local.hubs[0], "bgp_asn", "65000")
-    cidr    = var.spoke["cidr"]
-  }
-}
-
-#------------------------------------------------------------------------------------------------------------
-# Create FGT HA deployment with LoadBalancers
-#------------------------------------------------------------------------------------------------------------
 module "fgt-xlb" {
   source = "./modules/fgt-xlb"
 
@@ -38,13 +22,6 @@ module "fgt-xlb" {
   machine = var.custom_vars["fgt_size"]
 }
 
-#------------------------------------------------------------------------------------------------------------
-# Outputs
-#------------------------------------------------------------------------------------------------------------
-output "fgt" {
-  value = module.fgt-xlb.fgt
-}
-
 # ----------------------------------------------------------------------------------------
 # Data and Locals
 # ----------------------------------------------------------------------------------------
@@ -55,6 +32,24 @@ data "google_compute_zones" "available_zones" {
 locals {
   zone1 = length(data.google_compute_zones.available_zones.names) > 0 ? data.google_compute_zones.available_zones.names[0] : null
   zone2 = length(data.google_compute_zones.available_zones.names) > 1 ? data.google_compute_zones.available_zones.names[1] : null
+
+  hubs = var.hubs_secret_id != "" ? jsondecode(data.google_secret_manager_secret_version.hubs_secret.secret_data) : var.hubs != null ? var.hubs : [{}]
+  spoke = {
+    id      = var.spoke["id"]
+    bgp_asn = lookup(local.hubs[0], "bgp_asn", "65000")
+    cidr    = var.spoke["cidr"]
+  }
 }
 
 data "google_client_openid_userinfo" "me" {}
+
+data "google_secret_manager_secret_version" "hubs_secret" {
+  secret = var.hubs_secret_id
+}
+
+#------------------------------------------------------------------------------------------------------------
+# Outputs
+#------------------------------------------------------------------------------------------------------------
+output "fgt" {
+  value = module.fgt-xlb.fgt
+}
