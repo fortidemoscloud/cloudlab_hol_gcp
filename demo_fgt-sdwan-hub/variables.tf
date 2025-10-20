@@ -1,5 +1,3 @@
-variable "project" {}
-
 variable "prefix" {
   description = "Prefix to configured items in GCP"
   type        = string

@@ -3,7 +3,7 @@
 
 This deployment will create two Fortigate Clusters Active/Passive in two zones and with 3 ports (Management-HA, Public and Private)
 
-Note: it is possible to configure mangement and HA sync port since within some interface since version 7.0.2
+The configu
 
 ## Deployment Overview
 
