@@ -30,16 +30,18 @@ data "google_compute_zones" "available_zones" {
   region = local.custom_vars_merged["region"]
 }
 
+data "google_client_openid_userinfo" "me" {}
+
 locals {
   zone1 = length(data.google_compute_zones.available_zones.names) > 0 ? data.google_compute_zones.available_zones.names[0] : null
   zone2 = length(data.google_compute_zones.available_zones.names) > 1 ? data.google_compute_zones.available_zones.names[1] : null
 
-    # Parse the hub variable from JSON string to a list of maps
+  # Parse the hub variable from JSON string to a list of maps
   hub_parsed = jsondecode(var.hub)
-  
+
   # Parse the custom_vars variable from JSON string to an object
   custom_vars_parsed = jsondecode(var.custom_vars)
-  
+
   # Create a merged custom_vars with defaults for any missing values
   custom_vars_merged = {
     region           = try(local.custom_vars_parsed.region, "europe-west2")
@@ -51,8 +53,6 @@ locals {
     tags             = try(local.custom_vars_parsed.tags, { "Deploy" = "CloudLab GCP", "Project" = "CloudLab" })
   }
 }
-
-data "google_client_openid_userinfo" "me" {}
 
 #------------------------------------------------------------------------------------------------------------
 # Secrets

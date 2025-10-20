@@ -12,8 +12,8 @@ variable "fortiflex_token" {
 
 variable "custom_vars" {
   description = "Custom variables as JSON string"
-  type = string
-  default = "{}"
+  type        = string
+  default     = "{}"
 }
 
 variable "hub" {
