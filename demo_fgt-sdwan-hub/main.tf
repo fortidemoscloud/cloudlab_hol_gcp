@@ -61,7 +61,7 @@ resource "google_secret_manager_secret" "hubs" {
   secret_id = "${var.prefix}-hubs"
 
   replication {
-    auto {}
+    automatic = true
   }
 }
 
