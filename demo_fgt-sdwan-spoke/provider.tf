@@ -5,9 +5,9 @@ terraform {
   backend "s3" {}
 }
 provider "google" {
-  region  = var.custom_vars["region"]
+  region = var.custom_vars["region"]
 }
 provider "google-beta" {
-  region  = var.custom_vars["region"]
+  region = var.custom_vars["region"]
 }
 

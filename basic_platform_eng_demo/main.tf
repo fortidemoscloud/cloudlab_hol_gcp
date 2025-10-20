@@ -33,7 +33,7 @@ variable "custom_vars" {
 # Create FGT HA deployment with LoadBalancers
 #------------------------------------------------------------------------------------------------------------
 module "fgt-xlb" {
-  source  = "./modules/fgt-xlb"
+  source = "./modules/fgt-xlb"
 
   prefix = var.prefix
   region = var.custom_vars["region"]
@@ -46,7 +46,7 @@ module "fgt-xlb" {
     bgp_asn = "65000"
   }
 
-  license_type = var.custom_vars["license_type"]
+  license_type      = var.custom_vars["license_type"]
   fortiflex_token_1 = var.fortiflex_token
 
   cluster_type = var.custom_vars["fgt_cluster_type"]
@@ -58,7 +58,7 @@ module "fgt-xlb" {
 # Create VPC spokes peered to VPC FGT
 #------------------------------------------------------------------------------------------------------------
 module "vpc_spoke" {
-  source  = "./modules/vpc_spoke"
+  source = "./modules/vpc_spoke"
 
   prefix = var.prefix
   region = var.custom_vars["region"]
@@ -70,7 +70,7 @@ module "vpc_spoke" {
 # Create VM in VPC spokes
 #------------------------------------------------------------------------------------------------------------
 module "vm_spoke" {
-  source  = "./modules/vm"
+  source = "./modules/vm"
 
   prefix = var.prefix
   region = var.custom_vars["region"]
@@ -88,7 +88,7 @@ module "vm_spoke" {
 locals {
   # K8S configuration and APP deployment
   k8s_deployment = templatefile("./templates/voteapp.yml.tp", {
-      node_port  = "31000"
+    node_port = "31000"
     }
   )
   k8s_user_data = templatefile("./templates/k8s.sh.tp", {
@@ -109,7 +109,7 @@ output "k8s" {
   value = {
     admin_user = split("@", data.google_client_openid_userinfo.me.email)[0]
     pip        = join(", ", module.vm_spoke.vm["pip"])
-    ip         = join(", ",module.vm_spoke.vm["ip"])
+    ip         = join(", ", module.vm_spoke.vm["ip"])
     app_url    = "http://${module.vm_spoke.vm["pip"][0]}:31000"
   }
 }

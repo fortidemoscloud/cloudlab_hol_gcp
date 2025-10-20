@@ -26,18 +26,18 @@ module "fgt_config" {
   fgt-active-ni_ips  = module.fgt_vpc.fgt-active-ni_ips
   fgt-passive-ni_ips = module.fgt_vpc.fgt-passive-ni_ips
 
-  config_fgcp  = var.cluster_type == "fgcp" ? true : false
-  config_fgsp  = var.cluster_type == "fgsp" ? true : false
+  config_fgcp = var.cluster_type == "fgcp" ? true : false
+  config_fgsp = var.cluster_type == "fgsp" ? true : false
 
-  license_type = var.license_type
+  license_type      = var.license_type
   fortiflex_token_1 = var.fortiflex_token_1
   fortiflex_token_2 = var.fortiflex_token_2
 
   config_spoke = true
   spoke        = var.onramp
 
-  config_xlb   = true
-  ilb_ip       = module.fgt_vpc.ilb_ip
+  config_xlb = true
+  ilb_ip     = module.fgt_vpc.ilb_ip
 
   vpc-spoke_cidr = [module.fgt_vpc.subnet_cidrs["bastion"]]
 }
@@ -57,8 +57,8 @@ module "fgt" {
   gcp-user_name  = split("@", data.google_client_openid_userinfo.me.email)[0]
   license_type   = var.license_type
 
-  subnet_names       = module.fgt_vpc.subnet_names
-  fgt-active-ni_ips  = module.fgt_vpc.fgt-active-ni_ips
+  subnet_names      = module.fgt_vpc.subnet_names
+  fgt-active-ni_ips = module.fgt_vpc.fgt-active-ni_ips
 
   fgt_config_1 = module.fgt_config.fgt_config_1
 
@@ -77,10 +77,10 @@ module "xlb" {
   zone1  = var.zone1
   zone2  = var.zone2
 
-  vpc_names             = module.fgt_vpc.vpc_names
-  subnet_names          = module.fgt_vpc.subnet_names
-  ilb_ip                = module.fgt_vpc.ilb_ip
-  fgt_active_self_link  = module.fgt.fgt_active_self_link
+  vpc_names            = module.fgt_vpc.vpc_names
+  subnet_names         = module.fgt_vpc.subnet_names
+  ilb_ip               = module.fgt_vpc.ilb_ip
+  fgt_active_self_link = module.fgt.fgt_active_self_link
 }
 
 

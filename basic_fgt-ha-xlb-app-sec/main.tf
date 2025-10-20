@@ -107,7 +107,7 @@ output "k8s" {
   value = {
     admin_user = split("@", data.google_client_openid_userinfo.me.email)[0]
     pip        = join(", ", module.vm_spoke.vm["pip"])
-    ip         = join(", ",module.vm_spoke.vm["ip"])
+    ip         = join(", ", module.vm_spoke.vm["ip"])
   }
 }
 

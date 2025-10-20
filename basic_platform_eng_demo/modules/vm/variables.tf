@@ -60,6 +60,6 @@ variable "tags" {
 
 variable "user_data" {
   description = "VM custom data"
-  type    = string
-  default = null
+  type        = string
+  default     = null
 }
