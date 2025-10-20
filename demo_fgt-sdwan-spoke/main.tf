@@ -26,7 +26,7 @@ module "fgt-xlb" {
 # Data and Locals
 # ----------------------------------------------------------------------------------------
 data "google_compute_zones" "available_zones" {
-  region = var.custom_vars["region"]
+  region = local.custom_vars_merged["region"]
 }
 
 locals {
