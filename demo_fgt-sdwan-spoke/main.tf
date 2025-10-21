@@ -66,8 +66,29 @@ data "google_secret_manager_secret_version" "hubs_secret" {
 }
 
 #------------------------------------------------------------------------------------------------------------
+# Secrets
+#------------------------------------------------------------------------------------------------------------
+# Create fgt secret
+resource "google_secret_manager_secret" "fgt" {
+  secret_id = "${var.prefix}-fgt"
+
+  replication {
+    automatic = true
+  }
+}
+# Add the secret version with your value
+resource "google_secret_manager_secret_version" "fgt" {
+  secret      = google_secret_manager_secret.fgt.id
+  secret_data = jsonencode(module.fgt-xlb.fgt)
+}
+
+#------------------------------------------------------------------------------------------------------------
 # Outputs
 #------------------------------------------------------------------------------------------------------------
 output "fgt" {
   value = module.fgt-xlb.fgt
+}
+
+output "fgt_secret_id" {
+  value = "${var.prefix}-fgt"
 }
