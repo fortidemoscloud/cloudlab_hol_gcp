@@ -3,8 +3,10 @@
 # ------------------------------------------------------------------------------------------
 locals {
   # Parse the custom_vars variable from JSON string to an object
-  fgt = var.fgt_secret_id != "" ? jsondecode(data.google_secret_manager_secret_version.fgt_secret.secret_data) : var.fgt != "" ? jsondecode(var.fgt) : [{}]
-  
+  fgt_data = var.fgt_secret_id != "" ? data.google_secret_manager_secret_version.fgt_secret.secret_data : var.fgt != "" ? var.fgt : "{}"
+  fgt_data_cleaned = replace(local.fgt_data, "\\\\", "\\")
+  fgt = jsondecode(local.fgt_data_cleaned)
+
   # Create a merged FortiGate maps
   fgt_merged = {
     api_key    = try(local.fgt.api_key, "")
@@ -12,7 +14,8 @@ locals {
   }
 
   # Create a merged VIP maps
-  vip = jsondecode(var.vip)
+  vip_data_cleaned = replace(var.vip, "\\\\", "\\")
+  vip = jsondecode(local.vip_data_cleaned)
   vip_merged = { for k, v in local.vip : k => 
     {
       mappedip   = try(v.mappedip, "")
