@@ -40,6 +40,7 @@ module "fgt_config" {
 
   config_xlb = true
   ilb_ip     = module.fgt_vpc.ilb_ip
+  elb_ip     = module.xlb.elb-frontend
 
   vpc-spoke_cidr = [module.fgt_vpc.subnet_cidrs["bastion"]]
 }
