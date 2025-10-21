@@ -3,8 +3,8 @@
 # ------------------------------------------------------------------------------------------
 locals {
   # Parse the custom_vars variable from JSON string to an object
-  fgt = jsondecode(var.fgt)
-
+  fgt = var.fgt_secret_id != "" ? jsondecode(data.google_secret_manager_secret_version.fgt_secret.secret_data) : var.fgt != "" ? jsondecode(var.fgt) : [{}]
+  
   # Create a merged FortiGate maps
   fgt_merged = {
     api_key    = try(local.fgt.api_key, "")
@@ -27,6 +27,10 @@ locals {
 # Get port1 internal IP address
 data "fortios_system_interface" "port1" {
   name = "port1"
+}
+
+data "google_secret_manager_secret_version" "fgt_secret" {
+  secret = var.fgt_secret_id
 }
 
 # ------------------------------------------------------------------------------------------

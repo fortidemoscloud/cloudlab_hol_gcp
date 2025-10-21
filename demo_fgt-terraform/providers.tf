@@ -2,13 +2,22 @@
 # Terraform state
 # ------------------------------------------------------------------------------------------
 terraform {
-  required_version = ">= 0.12"
   required_providers {
     fortios = {
       source = "fortinetdev/fortios"
     }
+    google = {
+      source  = "hashicorp/google"
+      version = "4.48.0"
+    }
   }
+  backend "s3" {}
 }
+
+provider "google" {
+  region = var.region
+}
+
 # ------------------------------------------------------------------------------------------
 # FortiOS provider
 # ------------------------------------------------------------------------------------------
