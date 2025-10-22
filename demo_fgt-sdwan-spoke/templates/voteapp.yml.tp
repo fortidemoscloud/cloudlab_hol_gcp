@@ -20,10 +20,10 @@ spec:
     spec:
       containers:
       - name: vote-app
-        image: jviguerasfortinet/vote-app:v1
+        image: jviguerasfortinet/vote-app:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 5000
+        - containerPort: 3001
         env:
         - name: REDIS_HOST
           value: redis-voteapp.vote-app.svc.cluster.local
@@ -61,8 +61,8 @@ spec:
     app: vote-app
   ports:
   - protocol: TCP
-    port: 5000
-    targetPort: 5000
+    port: 3001
+    targetPort: 3001
     nodePort: ${node_port}
   type: NodePort
 ---
