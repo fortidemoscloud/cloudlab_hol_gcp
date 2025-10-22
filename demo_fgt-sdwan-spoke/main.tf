@@ -82,5 +82,5 @@ resource "google_secret_manager_secret" "vm" {
 # Create VM secret SSH public key
 resource "google_secret_manager_secret_version" "vm" {
   secret      = google_secret_manager_secret.vm.id
-  secret_data = module.fgt-xlb.public_key_openssh
+  secret_data = module.fgt-xlb.private_key_pem
 }

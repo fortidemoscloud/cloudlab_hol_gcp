@@ -38,3 +38,7 @@ output "subnet_ids" {
 output "public_key_openssh" {
   value = trimspace(tls_private_key.ssh-rsa.public_key_openssh)
 }
+
+output "private_key_pem" {
+  value = trimspace(tls_private_key.ssh-rsa.private_key_pem)
+}
