@@ -13,8 +13,9 @@ output "fgt_active_eip_mgmt" {
   value       = google_compute_address.active-mgmt-public-ip.address
 }
 
+/*
 output "fgt_active_eip_public" {
   description = "Fortigate instance member 1 public IP"
   value       = google_compute_address.active-public-ip.address
 }
-
+*/
