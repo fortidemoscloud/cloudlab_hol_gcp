@@ -4,7 +4,7 @@
 locals {
   # Parse the custom_vars variable from JSON string to an object
   fgt_data = var.fgt_secret_id != "" ? data.google_secret_manager_secret_version.fgt_secret.secret_data : var.fgt != "" ? var.fgt : "{}"
-  fgt = jsondecode(local.fgt_data)
+  fgt      = jsondecode(local.fgt_data)
 
   # Create a merged FortiGate maps
   fgt_merged = {
@@ -14,7 +14,7 @@ locals {
 
   # Create a merged VIP maps
   vip = jsondecode(var.vips)
-  vip_merged = { for k, v in local.vip : k => 
+  vip_merged = { for k, v in local.vip : k =>
     {
       mappedip   = try(v.mappedip, "")
       extport    = try(v.extport, "80")
@@ -39,7 +39,7 @@ data "google_secret_manager_secret_version" "fgt_secret" {
 # ------------------------------------------------------------------------------------------
 output "vip_firewall_policy" {
   value = { for k, v in fortios_firewall_policy.firewall_policy : k => {
-      firewall_policy = v.name
+    firewall_policy = v.name
     }
   }
 }

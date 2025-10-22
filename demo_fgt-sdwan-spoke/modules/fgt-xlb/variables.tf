@@ -31,8 +31,6 @@ variable "prefix" {
   default     = "fgt-ha-xlb"
 }
 
-
-
 #-----------------------------------------------------------------------------------------------------
 # FGT variables
 #-----------------------------------------------------------------------------------------------------
@@ -125,4 +123,16 @@ variable "fgt_passive" {
   description = "Deploy or not secondary FortiGate"
   type        = bool
   default     = false
+}
+
+variable "fgt_passive" {
+  description = "Deploy or not secondary FortiGate"
+  type        = bool
+  default     = false
+}
+
+variable "spoke_vpc_cidrs" {
+  description = "List of CIDRs for spoke VPC subnets"
+  type        = list(string)
+  default     = null
 }
