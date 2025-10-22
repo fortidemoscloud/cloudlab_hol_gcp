@@ -38,13 +38,13 @@ data "template_file" "fgt_active" {
     fgt_ha-fgsp-config = var.config_fgsp ? data.template_file.fgt_ha-fgsp-active-config.rendered : ""
     fgt_bgp-config     = var.config_spoke ? data.template_file.fgt_spoke_bgp-config.rendered : var.config_hub ? data.template_file.fgt_hub_bgp-config.rendered : ""
     fgt_static-config  = var.vpc-spoke_cidr != null ? data.template_file.fgt_active_static-config.rendered : ""
+    fgt_xlb-config     = var.config_xlb ? data.template_file.fgt_xlb-config.rendered : ""
     fgt_sdwan-config   = var.config_spoke ? join("\n", data.template_file.fgt_sdwan-config.*.rendered) : ""
     fgt_vxlan-config   = var.config_vxlan ? data.template_file.fgt_vxlan-config.rendered : ""
     fgt_vpn-config     = var.config_hub ? join("\n", data.template_file.fgt_vpn-config.*.rendered) : ""
     fgt_fmg-config     = var.config_fmg ? data.template_file.fgt_1_fmg-config.rendered : ""
     fgt_faz-config     = var.config_faz ? data.template_file.fgt_1_faz-config.rendered : ""
     fgt_ncc-config     = var.config_ncc ? data.template_file.fgt_ncc-config.rendered : ""
-    fgt_xlb-config     = var.config_xlb ? data.template_file.fgt_xlb-config.rendered : ""
     fgt_extra-config   = var.fgt_active_extra-config
   }
 }
@@ -98,6 +98,7 @@ data "template_file" "fgt_sdwan-config" {
     local_bgp_asn     = var.spoke["bgp_asn"]
     local_router_id   = var.fgt-active-ni_ips["mgmt"]
     local_network     = var.spoke["cidr"]
+    local_gw          = var.config_xlb && var.ports[lookup(var.hubs[count.index], "sdwan_port", "public")] == "public" && var.elb_ip != null ? var.elb_ip : ""
     sdwan_port        = var.ports[lookup(var.hubs[count.index], "sdwan_port", "public")]
     private_port      = var.ports["private"]
     count             = count.index + 1
