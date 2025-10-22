@@ -21,9 +21,7 @@ locals {
   }
 
   # Parse the custom_vars variable from JSON string to an object
-  custom_vars_parsed = jsondecode(local.custom_vars_merged)
-
-  # Create a merged custom_vars with defaults for any missing values
+  custom_vars_parsed = jsondecode(var.custom_vars)
   custom_vars_merged = {
     region           = try(local.custom_vars_parsed.region, "europe-west2")
     fgt_version      = try(local.custom_vars_parsed.fgt_version, "7.4.9")
