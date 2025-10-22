@@ -23,8 +23,8 @@ resource "google_compute_address" "active-mgmt-public-ip" {
   region       = var.region
 }
 
-# Create static passive instance public ip
 /*
+# Create static passive instance public ip
 resource "google_compute_address" "active-public-ip" {
   name         = "${var.prefix}-active-public-ip"
   address_type = "EXTERNAL"

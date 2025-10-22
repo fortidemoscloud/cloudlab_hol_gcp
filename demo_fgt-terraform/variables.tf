@@ -10,7 +10,7 @@ variable "fgt_secret_id" {
   default     = ""
 }
 
-variable "vip" {
+variable "vips" {
   description = "VIP configuration json string (maps: mappedip, extport, mappedport)"
   type        = string
   default     = "{}"

@@ -23,12 +23,14 @@ resource "google_compute_address" "active-mgmt-public-ip" {
   region       = var.region
 }
 
+/*
 # Create static passive instance management ip
 resource "google_compute_address" "active-public-ip" {
   name         = "${var.prefix}-active-public-ip"
   address_type = "EXTERNAL"
   region       = var.region
 }
+*/
 
 # Create FGTVM compute active instance
 resource "google_compute_instance" "fgt-active" {
@@ -50,9 +52,9 @@ resource "google_compute_instance" "fgt-active" {
   network_interface {
     subnetwork = var.subnet_names["public"]
     network_ip = var.fgt-active-ni_ips["public"]
-    access_config {
-      nat_ip = google_compute_address.active-public-ip.address
-    }
+    #access_config {
+    #   nat_ip = google_compute_address.active-public-ip.address
+    # }
   }
   network_interface {
     subnetwork = var.subnet_names["private"]

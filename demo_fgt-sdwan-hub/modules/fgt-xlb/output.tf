@@ -1,9 +1,17 @@
 output "fgt" {
   value = {
-    fgt_1_mgmt   = "${module.fgt.fgt_active_eip_mgmt}:${var.admin_port}"
+    fgt_1_mgmt   = "https://${module.fgt.fgt_active_eip_mgmt}:${var.admin_port}"
     fgt_1_pass   = module.fgt.fgt_active_id
     fgt_1_public = module.xlb.elb-frontend
     api_key      = module.fgt_config.api_key
+  }
+}
+
+output "fgt_secret" {
+  value = {
+    api_host  = "${module.fgt.fgt_active_eip_mgmt}:${var.admin_port}"
+    api_key   = module.fgt_config.api_key
+    public_ip = module.xlb.elb-frontend
   }
 }
 

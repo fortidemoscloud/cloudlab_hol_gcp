@@ -8,12 +8,12 @@ locals {
 
   # Create a merged FortiGate maps
   fgt_merged = {
-    api_key    = try(local.fgt.api_key, "")
-    fgt_1_mgmt = try(local.fgt.fgt_1_mgmt, "")
+    api_key  = try(local.fgt.api_key, "")
+    api_host = try(local.fgt.api_host, "")
   }
 
   # Create a merged VIP maps
-  vip = jsondecode(var.vip)
+  vip = jsondecode(var.vips)
   vip_merged = { for k, v in local.vip : k => 
     {
       mappedip   = try(v.mappedip, "")

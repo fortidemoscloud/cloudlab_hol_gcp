@@ -82,7 +82,7 @@ resource "google_secret_manager_secret" "fgt" {
 # Add the secret version with your value
 resource "google_secret_manager_secret_version" "fgt" {
   secret      = google_secret_manager_secret.fgt.id
-  secret_data = jsonencode(module.fgt-xlb.fgt)
+  secret_data = jsonencode(module.fgt-xlb.fgt_secret)
 }
 
 #------------------------------------------------------------------------------------------------------------

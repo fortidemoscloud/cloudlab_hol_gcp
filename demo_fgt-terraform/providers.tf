@@ -22,7 +22,7 @@ provider "google" {
 # FortiOS provider
 # ------------------------------------------------------------------------------------------
 provider "fortios" {
-  hostname = local.fgt_merged.fgt_1_mgmt
+  hostname = local.fgt_merged.api_host
   token    = local.fgt_merged.api_key
   insecure = "true"
 }
